@@ -9,12 +9,6 @@
   ],
   "require": {
     "php": "~5.5.0|~5.6.0|~7.0.0",
-    "magento/framework": "100.0.*",
-    "magento/module-sales": "*",
-    "magento/module-payment": "*",
-    "magento/module-quote": "*",
-    "magento/module-checkout": "100.0.*",
-    "magento/module-catalog": "100.0.*",
     "payapi/magento-plugin-gateway": "~1.0"
 
   },
