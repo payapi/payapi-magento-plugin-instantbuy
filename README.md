@@ -1,16 +1,19 @@
-# PayApi Plugin for Magento 2
+# PayApi Plugin - Instant Buy and UI extensions for Magento 2
 
 Magento payment method implementation of [PayApi Secure Form](https://payapi.io/apidoc/#api-Payments-PostSecureForm).
+
+Adds UI components to run the PayApi Instant Buy and allows to share the store contents through your social networks with FngrShareSDK.
 
 ## Contents
 
 Includes an easy-to-use PayApi extension for any Magento 2 webshop (plugin).
-In order to use the extension, please register for a free [PayApi user account](https://input.payapi.io)
+In order to use the payment gateway, please register for a free [PayApi user account](https://input.payapi.io)
 
 ## Server Requirements
 
 * [Magento CE](http://devdocs.magento.com/magento-system-requirements.html) 2.0 or higher. This plugin has been validated to work against the 2.1.0 Community Edition release.
 * [PHP](http://us2.php.net/downloads.php) 5.6 or higher. This plugin will not work on PHP 5.5 and below.
+* [Composer](http://devdocs.magento.com/guides/v2.0/install-gde/prereq/integrator_install_composer.html)
 
 ## Installation
 #### Method 1: Install Via Shell Script
@@ -21,9 +24,11 @@ In order to use the extension, please register for a free [PayApi user account](
 sh install-payapi-extension.sh  <magento_user@remote_server> <magento_home_directory>
 ```
 
-#### Method 2: Manual installation in server
-* Clone this repository in your local
-* Copy the Payapi and i18n folder inside your magento-home-directory/app/code
+#### Method 2: Manual installation in server with composer
+* Run the composer require command
+```bash
+composer require payapi/magento-plugin-instantbuy
+```
 * Upgrade modules list
 ```bash
 php bin/magento setup:upgrade
@@ -31,6 +36,10 @@ php bin/magento setup:upgrade
 * Deploy new modules
 ```bash
 php bin/magento setup:di:compile
+```
+* Deploy static content
+```bash
+php bin/magento setup:static-content:deploy en_GB fi_FI es_ES
 ```
 
 ## Configuration
