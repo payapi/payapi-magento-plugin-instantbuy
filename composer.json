@@ -1,5 +1,5 @@
 {
-  "name": "payapi/payapi/magento-plugin-instantbuy",
+  "name": "payapi/magento-plugin-instantbuy",
   "description": "Integrating the PayApi Instant Buy functionality for Magento 2",
   "type": "magento2-module",
   "version": "1.0.0",
