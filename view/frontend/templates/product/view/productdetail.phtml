@@ -159,7 +159,10 @@ echo $block->escapeHtml($block->getSecureFormData()->returnUrls->failed); ?>">
 <meta name="product.extraData" content="<?php
 echo $block->escapeHtml($block->getExtraData()); ?>">
 <meta name="product.meta.data" content="">
-<button id="payapi-button" class="action primary tocart">
+<button id="payapi-button" class="action primary" style="margin-top:10px; font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 10px 20px;">
   <span><?php echo $block->escapeHtml(__('Instant Buy')) ?></span>
 </button>
 <?php }?>

@@ -10,14 +10,14 @@ if(typeof _payapi == "undefined"){
 _payapi.addtocart = function _addtocart(url){
       var $addForm = $("#product_addtocart_form");
       if($addForm.length == 0){
-       $addForm = $("a.fngrsharesdk-product[href='"+url+"']").parent().find("form[data-role='tocart-form'], button[data-role='tocart']");
+       $addForm = $("a.fngrsharesdk-product[href='"+url+"']").parent().find("form[data-role='tocart-form'], button[data-role='tocart'], button.tocart");
        console.log($addForm);
       }
-      if($addForm.length == 1){
-       if($addForm.is("form")){
-        $addForm.submit();      
+      if($addForm.length >= 1){
+       if($addForm.first().is("form")){
+        $addForm.first().submit();      
        }else{
-        $addForm.click();
+        $addForm.first().click();
        }
 
       }else{
@@ -54,11 +54,11 @@ var _payapiConfig = {
    $(".price-box:not(.product-info-price .price-box)").after(function(){
      var id = $(this).attr('data-product-id');
      itemsIds["itemsIds"].push(id);
-      return "<button data-qty='1' data-mandatory='0' "
+      return "<div class='actions'><button data-qty='1' data-mandatory='0' "
       + "id='payapi-button" + id +"' "
-      + "class='action primary tocart payapi-button' style='margin-bottom:10px'>"
+      + "class='action primary payapi-button' style='margin:10px;'>"
       + "<span><?php echo $block->escapeHtml(__('Instant Buy')) ?></span>"
-      + "</button>";
+      + "</button></div>";
    });
 
    if (itemsIds.itemsIds.length > 0)
@@ -124,7 +124,7 @@ var _payapiConfig = {
 
    window.setTimeout(function(){
           $("#top-cart-btn-checkout").after(
-           "<button class='action primary checkout' style='margin-top:10px' id='payapi-mini-instantbuy'><span><?php
+           "<button class='action primary checkout' style='margin:10px' id='payapi-mini-instantbuy'><span><?php
 echo $block->escapeHtml(__('Instant Buy')) ?></span></button>");
           var $btnClicked = $("#payapi-mini-instantbuy");
     $btnClicked.click(function(evt){
