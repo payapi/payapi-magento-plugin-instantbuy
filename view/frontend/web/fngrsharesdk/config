@@ -8,5 +8,6 @@
 		"mobile": [],
 		"desktop": []
 	},
-	"featureCircleBackgroundColor": [0,0,0,0.8] 
+	"featureCircleBackgroundColor": [0,0,0,0.8],
+	"shortenerClientId": "fngrsharesdk" 
 }

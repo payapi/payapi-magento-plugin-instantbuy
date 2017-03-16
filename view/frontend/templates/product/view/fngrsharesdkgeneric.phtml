@@ -26,12 +26,15 @@ _payapi.addtocart = function _addtocart(url){
     };
 
 
-var _payapiConfig = {
+var _fngrshareConfig = {
    isStaging: function _isStaging(){
      return <?php echo ($block->getIsStaging()); ?>;
    },
    enablePurchases: function _enablePurchases(){
     return <?php echo ($block->getIsInstantBuyEnabled()); ?>;
+   },
+   shortenerClientId: function _shortenerClientId(){
+    return "<?php echo $block->escapeHtml($block->getPublicId()) ?>";
    }
   };
  require(['jquery','payapiSdk'],function($){
@@ -92,9 +95,9 @@ var _payapiConfig = {
          if (href && href.indexOf("payapiwebshop") < 0 ){
 
           if (href.indexOf("?") >= 0 ){
-           href = href + '&payapiwebshop='+((_payapiConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
+           href = href + '&payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
           } else {
-           href = href + '?payapiwebshop='+((_payapiConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
+           href = href + '?payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
           }
 
           href = href + '&hasMandatory=' + $(this).parent().find('button.payapi-button').attr('data-mandatory');
@@ -104,13 +107,18 @@ var _payapiConfig = {
           $(this).closest("div.product-item-info").attr("fngrsharesdk-product-container",href);
          }
        });
+
+      $(".product-item-link").each(function(){
+        var href = $(this).closest(".product-item-info").find('.fngrsharesdk-product').attr('href');
+        $(this).attr('href', href);
+      });
     }
    });
 
 
    $(".payapi-button").click(function(evt){
             evt.preventDefault();
-            var productUrl = $(this).parent().find('.fngrsharesdk-product').attr('href');
+            var productUrl = $(this).parent().parent().find('.fngrsharesdk-product').attr('href');
             if(!productUrl){
               productUrl = $(this).closest(".product-item-info").find('.fngrsharesdk-product').attr('href');
             }
