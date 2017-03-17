@@ -26,6 +26,10 @@
           var auxAttrs = [];
           attrsForm.forEach (function(item){
             auxAttrs[item.name] = item.value;
+          });
+          attrsForm = $toCartForm.find(":input.swatch-input").serializeArray();          
+          attrsForm.forEach (function(item){
+            auxAttrs[item.name] = item.value;
           });          
           attrsForm = auxAttrs;          
           console.log(JSON.stringify(attrsForm));
@@ -100,6 +104,13 @@
         var $toCartForm = $("#product_addtocart_form");
         $toCartForm.change(function(){
 
+          var currUrl = window.location.href;
+          var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
+          currUrl = currUrl+"&"+opts;
+          $("meta[name='product.meta.data']").attr("content", currUrl);
+        });
+
+        $(document).on('fngr:hold',function(){          
           var currUrl = window.location.href;
           var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
           currUrl = currUrl+"&"+opts;
