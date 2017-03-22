@@ -148,7 +148,7 @@ echo $block->escapeHtml(__('Instant Buy')) ?></span></button>");
                success: function(data){
                    payapiSdk.configure("<?php echo $block->escapeHtml($block->getPublicId()) ?>",
                     "<?php echo $block->escapeHtml($block->getApiKey()) ?>",
-                    payapiActions.isStaging);
+                    payapiActions.isStaging == "1");
                    payapiSdk.postData(data);
                }
            });

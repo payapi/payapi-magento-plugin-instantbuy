@@ -37,16 +37,13 @@ class ProductDetail extends AbstractProduct
             if ($this->visitorIp != $clientIp) {
                 $param = ['qty' => $this->getQty()];
                 $opts  = $this->getMandatoryValues();
-                $superAttrs = $this->getSuperAttributes();
+
                 if (!empty($opts)) {
                     $param['options'] = $opts;
                 }
-                if(!empty($superAttrs)) {
-                    $param['super_attribute'] = $superAttrs;
-                }
 
                 $this->secureformData = $this->secureFormHelper->getInstantBuySecureForm(
-                    $this->getProduct()->getId(),
+                    $this->getSimpleProductId(),
                     $param,
                     $this->visitorIp
                 );
@@ -75,6 +72,36 @@ class ProductDetail extends AbstractProduct
         return 1;
     }
 
+    public function getSimpleProductId(){
+
+        $product = $this->getProduct();
+        if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
+            $superAttrs = $this->getSuperAttributes();            
+            $keys      = [];
+            $usedProds = $product->getTypeInstance()->getUsedProducts($product);
+            foreach ($product->getTypeInstance()->getConfigurableAttributesAsArray($product) as $it) {
+                $keys[] = $it["attribute_id"];
+            }
+            foreach ($usedProds as $simple) {
+                $isThisProduct = true;                
+                foreach ($keys as $k) {
+                    $atr   = $product->getResource()->getAttribute($k);
+                    $myval = $atr->getFrontend()->getValue($simple);
+                    if ($atr->usesSource()) {
+                        $myval = $atr->getSource()->getOptionId($myval);
+                    }
+                    $isThisProduct = $isThisProduct && $superAttrs[$atr->getAttributeId()] == $myval;
+                }
+
+                if ($isThisProduct) {
+                    $this->logger->debug("GET SIMPLEPRODUCTID. THIS IS THE PRODUCT ID: ". $simple->getId());
+                    return $simple->getId();                
+                }
+            }
+        }
+
+        return $this->getProduct()->getId();
+    }
     public function getSuperAttributes(){
         $val = $this->getRequest()->getQueryValue('super_attribute');
         if ($val) {
@@ -226,6 +253,7 @@ class ProductDetail extends AbstractProduct
                 $resul["attrs"][$strAtrs] = [($stockItem->getQty()) ? $stockItem->getQty() : 0,
                     $stockItem->getMinSaleQty(),
                     $stockItem->getMaxSaleQty(),
+                    $simple->getId()
                 ];
             }
         }
