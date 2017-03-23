@@ -2,8 +2,7 @@
 <div>
 <?php if ($block->checkPayApiConfiguration() && $block->getIsInstantBuyEnabled()) {?>
 <script>
-require(['jquery',
-        'payapiSdk'],function($){
+require(['jquery'],function($){
 
     var $btnClicked = $("#payapi-instantbutton");
     $btnClicked.click(function(evt){
@@ -17,11 +16,21 @@ require(['jquery',
             type: "POST",
             url: "/payapipages/index/secureformgenerator",
             data: jsonData,
-            success: function(data){
-                payapiSdk.configure(window.checkoutConfig.payment.customPayment.payapi_public_id,
-                                     window.checkoutConfig.payment.customPayment.payapi_api_key,
-                                     window.checkoutConfig.payment.customPayment.payapi_is_staging == "1");
-                payapiSdk.postData(data);
+            success: function(object){
+              var form = document.createElement('form');
+              form.style.display = 'none';
+              form.setAttribute('method', 'POST');
+              form.setAttribute('action', object.url);
+              form.setAttribute('enctype', 'application/json');
+
+              var input = document.createElement('input');
+              input.name = 'data';
+              input.type = 'text';
+              input.setAttribute('value', object.data);
+
+              form.appendChild(input);
+              document.getElementsByTagName('body')[0].appendChild(form);
+              form.submit();
             }
         });
     });

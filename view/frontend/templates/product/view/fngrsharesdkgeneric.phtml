@@ -37,7 +37,7 @@ var _fngrshareConfig = {
     return "<?php echo $block->escapeHtml($block->getPublicId()) ?>";
    }
   };
- require(['jquery','payapiSdk'],function($){
+ require(['jquery'],function($){
   require(['fngrtouch','fngrui','fngrsdk'],function(){
 
    <?php if ($block->getIsStaging()) {?>
@@ -145,11 +145,21 @@ echo $block->escapeHtml(__('Instant Buy')) ?></span></button>");
                type: "POST",
                url: "/payapipages/index/secureformgenerator",
                data: jsonData,
-               success: function(data){
-                   payapiSdk.configure("<?php echo $block->escapeHtml($block->getPublicId()) ?>",
-                    "<?php echo $block->escapeHtml($block->getApiKey()) ?>",
-                    payapiActions.isStaging == "1");
-                   payapiSdk.postData(data);
+               success: function(object){
+                  var form = document.createElement('form');
+                  form.style.display = 'none';
+                  form.setAttribute('method', 'POST');
+                  form.setAttribute('action', object.url);
+                  form.setAttribute('enctype', 'application/json');
+
+                  var input = document.createElement('input');
+                  input.name = 'data';
+                  input.type = 'text';
+                  input.setAttribute('value', object.data);
+
+                  form.appendChild(input);
+                  document.getElementsByTagName('body')[0].appendChild(form);
+                  form.submit();
                }
            });
        });
