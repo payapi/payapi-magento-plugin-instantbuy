@@ -261,4 +261,14 @@ class ProductDetail extends AbstractProduct
         $this->logger->debug($strResul);
         return $strResul;
     }
+
+    public function escapeHtml($message, $allow = null) {
+        $escaped = htmlentities($message);
+        $this->logger->debug($escaped);
+        return $escaped;
+    }
+
+    public function escapeUrl($message) {
+        return urlencode($message);
+    }
 }

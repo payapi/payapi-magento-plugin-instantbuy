@@ -129,7 +129,7 @@ echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsEx
 <meta name="order.shippingHandlingFeeInCentsIncVat" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsIncVat); ?>">
 <meta name="order.tosUrl" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->order->tosUrl); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->order->tosUrl); ?>">
 <meta name="product.id" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[0]->id); ?>">
 <meta name="product.quantity" content="<?php
@@ -137,7 +137,7 @@ echo $block->escapeHtml($block->getSecureFormData()->products[0]->quantity); ?>"
 <meta name="product.title" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[0]->title); ?>">
 <meta name="product.imageUrl" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->products[0]->imageUrl); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->products[0]->imageUrl); ?>">
 <meta name="product.priceInCentsIncVat" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[0]->priceInCentsIncVat); ?>">
 <meta name="product.priceInCentsExcVat" content="<?php
@@ -153,19 +153,19 @@ echo $block->escapeHtml($block->getSecureFormData()->consumer->email); ?>">
 <meta name="consumer.locale" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->consumer->locale); ?>">
 <meta name="callbacks.processing" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->callbacks->processing); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->callbacks->processing); ?>">
 <meta name="callbacks.success" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->callbacks->success); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->callbacks->success); ?>">
 <meta name="callbacks.failed" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->callbacks->failed); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->callbacks->failed); ?>">
 <meta name="callbacks.chargeback" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->callbacks->chargeback); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->callbacks->chargeback); ?>">
 <meta name="returnUrls.success" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->returnUrls->success); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->returnUrls->success); ?>">
 <meta name="returnUrls.cancel" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->returnUrls->cancel); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->returnUrls->cancel); ?>">
 <meta name="returnUrls.failed" content="<?php
-echo $block->escapeHtml($block->getSecureFormData()->returnUrls->failed); ?>">
+echo $block->escapeUrl($block->getSecureFormData()->returnUrls->failed); ?>">
 <?php }?>
 <meta name="product.extraData" content="<?php
 echo $block->escapeHtml($block->getExtraData()); ?>">
