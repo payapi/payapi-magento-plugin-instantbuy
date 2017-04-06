@@ -95,9 +95,9 @@ var _fngrshareConfig = {
          if (href && href.indexOf("payapiwebshop") < 0 ){
 
           if (href.indexOf("?") >= 0 ){
-           href = href + '&payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
+           href = href + '&payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0');
           } else {
-           href = href + '?payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0')+'&ip=<?php echo $block->escapeHtml($block->getVisitorIp()); ?>';
+           href = href + '?payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0');
           }
 
           href = href + '&hasMandatory=' + $(this).parent().find('button.payapi-button').attr('data-mandatory');

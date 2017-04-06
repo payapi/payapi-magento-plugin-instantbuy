@@ -19,7 +19,6 @@ class ProductDetail extends AbstractProduct
         $this->instantBuyBlock     = $instantBuyBlock;
         $this->secureFormHelper    = $secureFormHelper;
         $this->secureformData      = false;
-        $this->visitorIp           = "";
         $this->messageManager      = $messageManager;
         $this->stockItemRepository = $stockItemRepository;
         $this->logger              = $logger;
@@ -29,12 +28,10 @@ class ProductDetail extends AbstractProduct
     {
         $this->logger->debug("checkPayApiConfiguration");
         if ($this->instantBuyBlock->checkPayApiConfiguration()) {
-            $this->visitorIp = $this->instantBuyBlock->getVisitorIp();
-            //Just generate metas if invoker has different domain
-            $this->logger->debug("checkPayApiConfiguration 2");
-            $clientIp = $this->instantBuyBlock->getVisitorIp(false);
-            $this->logger->debug($this->visitorIp . " --- " . $clientIp);
-            if ($this->visitorIp != $clientIp) {
+            
+            $consumerIp = $this->getRequest()->getQueryValue('consumerIp');
+            $this->logger->debug("Consumer IP: ".$consumerIp);
+            if (isset($consumerIp)) {
                 $param = ['qty' => $this->getQty()];
                 $opts  = $this->getMandatoryValues();
 
@@ -45,7 +42,7 @@ class ProductDetail extends AbstractProduct
                 $this->secureformData = $this->secureFormHelper->getInstantBuySecureForm(
                     $this->getSimpleProductId(),
                     $param,
-                    $this->visitorIp
+                    $consumerIp
                 );
             } else {
                 if ($this->instantBuyBlock->getIsInstantBuyEnabled()
@@ -53,7 +50,7 @@ class ProductDetail extends AbstractProduct
                     if ($this->checkMandatoryFields()) {
                         $this->messageManager->addNotice(__('Please specify product option(s).'));
                         $this->generateStockMessages();
-                    }                    
+                    }
                 }
 
             }
@@ -72,18 +69,19 @@ class ProductDetail extends AbstractProduct
         return 1;
     }
 
-    public function getSimpleProductId(){
+    public function getSimpleProductId()
+    {
 
         $product = $this->getProduct();
         if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
-            $superAttrs = $this->getSuperAttributes();            
-            $keys      = [];
-            $usedProds = $product->getTypeInstance()->getUsedProducts($product);
+            $superAttrs = $this->getSuperAttributes();
+            $keys       = [];
+            $usedProds  = $product->getTypeInstance()->getUsedProducts($product);
             foreach ($product->getTypeInstance()->getConfigurableAttributesAsArray($product) as $it) {
                 $keys[] = $it["attribute_id"];
             }
             foreach ($usedProds as $simple) {
-                $isThisProduct = true;                
+                $isThisProduct = true;
                 foreach ($keys as $k) {
                     $atr   = $product->getResource()->getAttribute($k);
                     $myval = $atr->getFrontend()->getValue($simple);
@@ -94,15 +92,16 @@ class ProductDetail extends AbstractProduct
                 }
 
                 if ($isThisProduct) {
-                    $this->logger->debug("GET SIMPLEPRODUCTID. THIS IS THE PRODUCT ID: ". $simple->getId());
-                    return $simple->getId();                
+                    $this->logger->debug("GET SIMPLEPRODUCTID. THIS IS THE PRODUCT ID: " . $simple->getId());
+                    return $simple->getId();
                 }
             }
         }
 
         return $this->getProduct()->getId();
     }
-    public function getSuperAttributes(){
+    public function getSuperAttributes()
+    {
         $val = $this->getRequest()->getQueryValue('super_attribute');
         if ($val) {
             return $val;
@@ -253,7 +252,7 @@ class ProductDetail extends AbstractProduct
                 $resul["attrs"][$strAtrs] = [($stockItem->getQty()) ? $stockItem->getQty() : 0,
                     $stockItem->getMinSaleQty(),
                     $stockItem->getMaxSaleQty(),
-                    $simple->getId()
+                    $simple->getId(),
                 ];
             }
         }
@@ -262,13 +261,15 @@ class ProductDetail extends AbstractProduct
         return $strResul;
     }
 
-    public function escapeHtml($message, $allow = null) {
+    public function escapeHtml($message, $allow = null)
+    {
         $escaped = htmlentities($message);
         $this->logger->debug($escaped);
         return $escaped;
     }
 
-    public function escapeUrl($message) {
+    public function escapeUrl($message)
+    {
         return urlencode($message);
     }
 }
