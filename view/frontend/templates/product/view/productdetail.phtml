@@ -15,6 +15,7 @@
             }
           return '';
         }
+
         //Add product options to the currUrl
         var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
         var configurableProdStock = <?php echo $block->getStockForConfigurableProduct() ?>;
@@ -73,17 +74,15 @@
               return '';
           }
 
-
-
+        if (silencePopup){          
+          return url+"&"+opts;
+        }
         var productUrl = 'https://input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
         if (url.indexOf("payapiwebshop=1") > 0) {
           productUrl = 'https://staging-input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
         }else if (url.indexOf("payapiwebshop=0") > 0) {
           productUrl = 'https://input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
         }
-
-        if (silencePopup)
-          return productUrl;
         window.location = productUrl;
     }
   };
@@ -92,31 +91,11 @@
         $(".fngrsharesdk-container").addClass("fngrsharesdk-productpage");
         var msg = $.mage.__("Please fill in all of the required fields");
 
-        var currUrl = window.location.href;
-        $("meta[name='product.meta.data']").attr("content", currUrl);
-
-          var $btnClicked = $("#payapi-button");
+        var $btnClicked = $("#payapi-button");
           $btnClicked.click(function(evt){
             evt.preventDefault();
             _payapi.checkMandatory(currUrl,false,msg);
           });
-
-        var $toCartForm = $("#product_addtocart_form");
-        $toCartForm.change(function(){
-
-          var currUrl = window.location.href;
-          var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
-          currUrl = currUrl+"&"+opts;
-          $("meta[name='product.meta.data']").attr("content", currUrl);
-        });
-
-        $(document).on('fngr:hold',function(){          
-          var currUrl = window.location.href;
-          var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
-          currUrl = currUrl+"&"+opts;
-          $("meta[name='product.meta.data']").attr("content", currUrl);
-        });
-
   });
   </script>
 <?php if ($block->getSecureFormData() && count($block->getSecureFormData()->products) > 1) {?>
@@ -169,7 +148,6 @@ echo $block->escapeUrl($block->getSecureFormData()->returnUrls->failed); ?>">
 <?php }?>
 <meta name="product.extraData" content="<?php
 echo $block->escapeHtml($block->getExtraData()); ?>">
-<meta name="product.meta.data" content="">
 <button id="payapi-button" class="action primary" style="margin-top:10px; font-size: 16px;
     text-transform: uppercase;
     font-weight: 500;
