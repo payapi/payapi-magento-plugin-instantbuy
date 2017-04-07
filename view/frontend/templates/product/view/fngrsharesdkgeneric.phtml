@@ -91,21 +91,31 @@ var _fngrshareConfig = {
 
       });
       $(".fngrsharesdk-product").each(function(){
-         var href = $(this).attr('href');
-         if (href && href.indexOf("payapiwebshop") < 0 ){
-
-          if (href.indexOf("?") >= 0 ){
-           href = href + '&payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0');
-          } else {
-           href = href + '?payapiwebshop='+((_fngrshareConfig.isStaging())?'1':'0');
+          var href = $(this).attr('href');
+          if (href && href.indexOf("hasMandatory") < 0 ){
+            var myIsMandatory = $(this).parent().find('button.payapi-button').attr('data-mandatory');
+            if(myIsMandatory == '1') {
+                if(href.indexOf("?") < 0){
+                  href = href + '?hasMandatory=1';
+                }else{
+                  href = href + '&hasMandatory=1';
+                }
+            }
           }
 
-          href = href + '&hasMandatory=' + $(this).parent().find('button.payapi-button').attr('data-mandatory');
-          href = href + '&qty=' + $(this).parent().find('button.payapi-button').attr('data-qty');
+          if (href && href.indexOf("qty") < 0 ){
+            var myQty = $(this).parent().find('button.payapi-button').attr('data-qty');
+            if(myQty != '1') {
+              if(href.indexOf("?") < 0){
+                  href = href + '?qty=' + myQty;
+              }else{
+                  href = href + '&qty=' + myQty;
+              }
+            }
+          }
 
           $(this).attr('href', href);
-          $(this).closest("div.product-item-info").attr("fngrsharesdk-product-container",href);
-         }
+          $(this).closest("div.product-item-info").attr("fngrsharesdk-product-container",href);         
        });
 
       $(".product-item-link").each(function(){

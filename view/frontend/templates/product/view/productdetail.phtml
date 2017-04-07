@@ -50,7 +50,7 @@
       }
 
           var curQty = $("#qty").attr("value");
-          var $messages = $(".page.messages");
+          var $messages = $(".page-messages.messages");
           if (curQty > stockVals[0]) {
               $messages.empty();
               var msg = "<?php echo $block->escapeHtml($block->getStockMessage(0)); ?>";
@@ -77,12 +77,8 @@
         if (silencePopup){          
           return url+"&"+opts;
         }
-        var productUrl = 'https://input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
-        if (url.indexOf("payapiwebshop=1") > 0) {
-          productUrl = 'https://staging-input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
-        }else if (url.indexOf("payapiwebshop=0") > 0) {
-          productUrl = 'https://input.payapi.io/v1/webshop/'+ encodeURIComponent(url+"&"+opts);
-        }
+        var productUrl = "<?php echo ($block->getInstantBuyBlock()->getIsStaging())? 'https://staging-input.payapi.io/v1/webshop/':'https://input.payapi.io/v1/webshop/';?>";
+        productUrl = productUrl + encodeURIComponent(url+"&"+opts);        
         window.location = productUrl;
     }
   };
@@ -94,7 +90,7 @@
         var $btnClicked = $("#payapi-button");
           $btnClicked.click(function(evt){
             evt.preventDefault();
-            _payapi.checkMandatory(currUrl,false,msg);
+            _payapi.checkMandatory(location.href,false,msg);
           });
   });
   </script>
