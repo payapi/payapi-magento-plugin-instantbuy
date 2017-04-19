@@ -73,12 +73,16 @@
               alert($(".message-error").text());
               return '';
           }
+        var separator = "&";
+        if(url.indexOf("?") < 0){
+          separator = "?";
+        }
 
         if (silencePopup){          
-          return url+"&"+opts;
+          return url+separator+opts;
         }
         var productUrl = "<?php echo ($block->getInstantBuyBlock()->getIsStaging())? 'https://staging-input.payapi.io/v1/webshop/':'https://input.payapi.io/v1/webshop/';?>";
-        productUrl = productUrl + encodeURIComponent(url+"&"+opts);        
+        productUrl = productUrl + encodeURIComponent(url+separator+opts);        
         window.location = productUrl;
     }
   };

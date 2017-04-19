@@ -9,10 +9,12 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
+        \Payapi\CheckoutPayment\Model\Config\AllActiveShippingMethods $allShippingMethods,
         array $data = []
     ) {
         $this->paymentHelper = $paymentHelper;
         $this->remoteAddress = $remoteAddress;
+        $this->allShippingMethods = $allShippingMethods;
         parent::__construct($context, $data);
     }
 
@@ -25,7 +27,7 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
         $this->isInstantBuyEnabled       = $paymentMethod->getConfigData('instantbuy_enabled');
         $this->isStaging                 = $paymentMethod->getConfigData('staging');
 
-        return isset($this->payapiPublicId) && isset($this->payapiApiKey) && isset($this->instantBuyDefaultShipping) && is_string($this->instantBuyDefaultShipping) && strlen($this->instantBuyDefaultShipping) > 0;
+        return isset($this->payapiPublicId) && isset($this->payapiApiKey) && isset($this->instantBuyDefaultShipping) && is_string($this->instantBuyDefaultShipping) && strlen($this->instantBuyDefaultShipping) > 0 && $this->allShippingMethods->contains($this->instantBuyDefaultShipping);
     }
 
     public function getPublicId()
