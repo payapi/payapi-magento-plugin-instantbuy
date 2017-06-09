@@ -91,9 +91,13 @@ var _fngrshareConfig = {
 
       });
       $(".fngrsharesdk-product").each(function(){
+          var $payapiButton = $(this).parent().find('button.payapi-button');
+          if ($payapiButton.length == 0) {
+            $payapiButton = $(this).parent().parent().find('button.payapi-button');
+          }
           var href = $(this).attr('href');
           if (href && href.indexOf("hasMandatory") < 0 ){
-            var myIsMandatory = $(this).parent().find('button.payapi-button').attr('data-mandatory');
+            var myIsMandatory = $payapiButton.attr('data-mandatory');
             if(myIsMandatory == '1') {
                 if(href.indexOf("?") < 0){
                   href = href + '?hasMandatory=1';
@@ -104,8 +108,8 @@ var _fngrshareConfig = {
           }
 
           if (href && href.indexOf("qty") < 0 ){
-            var myQty = $(this).parent().find('button.payapi-button').attr('data-qty');
-            if(myQty != '1') {
+            var myQty = $payapiButton.attr('data-qty');
+            if(typeof myQty != "undefined" && myQty != '1') {
               if(href.indexOf("?") < 0){
                   href = href + '?qty=' + myQty;
               }else{
