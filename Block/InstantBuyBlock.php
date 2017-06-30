@@ -26,8 +26,9 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
         $this->instantBuyDefaultShipping = $paymentMethod->getConfigData('instantbuy_shipping_method');
         $this->isInstantBuyEnabled       = $paymentMethod->getConfigData('instantbuy_enabled');
         $this->isStaging                 = $paymentMethod->getConfigData('staging');
+        $this->isEnabled                 = $paymentMethod->getConfigData('active');
 
-        return isset($this->payapiPublicId) && isset($this->payapiApiKey) && isset($this->instantBuyDefaultShipping) && is_string($this->instantBuyDefaultShipping) && strlen($this->instantBuyDefaultShipping) > 0 && $this->allShippingMethods->contains($this->instantBuyDefaultShipping);
+        return $this->isEnabled && isset($this->payapiPublicId) && isset($this->payapiApiKey) && isset($this->instantBuyDefaultShipping) && is_string($this->instantBuyDefaultShipping) && strlen($this->instantBuyDefaultShipping) > 0 && $this->allShippingMethods->contains($this->instantBuyDefaultShipping);
     }
 
     public function getPublicId()
