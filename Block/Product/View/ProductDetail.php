@@ -32,6 +32,7 @@ class ProductDetail extends AbstractProduct
             $consumerIp = $this->getRequest()->getQueryValue('consumerIp');
             $this->logger->debug("Consumer IP: ".$consumerIp);
             if (isset($consumerIp)) {
+                $this->checkCurrency();
                 $param = ['qty' => $this->getQty()];
                 $opts  = $this->getMandatoryValues();
 
@@ -67,6 +68,15 @@ class ProductDetail extends AbstractProduct
         }
 
         return 1;
+    }
+
+    public function checkCurrency()
+    {
+        $val = $this->getRequest()->getQueryValue('currency');
+        if($val) {
+            $this->logger->debug("Not base currency: ". $val);
+            //Change current currency to $val before generate metadata. Check if prices are correct
+        }
     }
 
     public function getSimpleProductId()
