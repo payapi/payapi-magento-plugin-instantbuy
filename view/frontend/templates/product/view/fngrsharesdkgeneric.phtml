@@ -2,7 +2,7 @@
 
 <?php if ($block->checkPayApiConfiguration()) {?>
 
-<script>
+<script>  
 if(typeof _payapi == "undefined"){
  var _payapi = {};
 }
@@ -39,7 +39,23 @@ var _fngrshareConfig = {
   };
  require(['jquery'],function($){
   require(['fngrtouch','fngrui','fngrsdk'],function(){
-
+    if(location.href.indexOf("checkout")>0){    
+      var done = false;
+    $(document).change(function(){
+          var logo = document.getElementById('payapi-logo');
+          var title = document.getElementById('payapi-title');
+          if(!done && logo && title) {
+            done = true;
+            var jsObj = '<?php echo json_encode($block->getPartner());?>';
+            var payapiPartner = JSON.parse(jsObj);      
+              console.log(payapiPartner); 
+              if(payapiPartner.code == 200){
+                  logo.src=payapiPartner.data.partnerLogoUrl;          
+                  title.innerHTML = payapiPartner.data.partnerName + " - "+payapiPartner.data.partnerSlogan;
+                }
+              }
+    });
+  }
    <?php if ($block->getIsStaging()) {?>
     payapiActions.isStaging = true;
    <?php } else {?>
