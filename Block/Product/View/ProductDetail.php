@@ -13,6 +13,10 @@ class ProductDetail extends AbstractProduct
         \Payapi\CheckoutPayment\Logger\Logger $logger,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Tax\Api\TaxCalculationInterface $taxCalculation,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -21,6 +25,10 @@ class ProductDetail extends AbstractProduct
         $this->secureformData      = false;
         $this->messageManager      = $messageManager;
         $this->stockItemRepository = $stockItemRepository;
+        $this->storeManager        = $storeManager;
+        $this->taxCalculation      = $taxCalculation;
+        $this->scopeConfig         = $scopeConfig;
+        $this->productRepository   = $productRepository;
         $this->logger              = $logger;
     }
 
@@ -281,5 +289,29 @@ class ProductDetail extends AbstractProduct
     public function escapeUrl($message)
     {
         return urlencode($message);
+    }
+
+
+    public function getPriceInclTax()
+    {
+        $product = $this->getProduct(); 
+        $price = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        $this->logger->debug("PriceeeeeeeeInclTax ".$price);
+        return $price;         
+    }
+
+    public function getCurrentCurrencyCode()
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
+    } 
+
+    public function isPartialPaymentUrl() {
+        $val = $this->getRequest()->getQueryValue('partialPayment');
+        $this->logger->debug("PARTIAL PAYMENT: ".$val);
+        if ($val && is_numeric($val)) {
+            return ((int) ($val)) == 1;
+        }
+
+        return false;
     }
 }

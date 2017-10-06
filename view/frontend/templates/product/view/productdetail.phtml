@@ -1,12 +1,13 @@
 
 <div>
-<?php if ($block->checkPayApiConfiguration() && $block->getInstantBuyBlock()->getIsInstantBuyEnabled()) {
+<?php if ($block->checkPayApiConfiguration()){
+  if($block->getInstantBuyBlock()->getIsInstantBuyEnabled()) {
     ?>
 
   <script>
 
   var _payapi = {
-    checkMandatory: function _checkMandatory(url,silencePopup,msg){
+    checkMandatory: function _checkMandatory(url,silencePopup,msg, partial = false){
         var $toCartForm = $("#product_addtocart_form");
         var isValid = $toCartForm.validation('isValid');
         if (!isValid){
@@ -18,6 +19,11 @@
 
         //Add product options to the currUrl
         var opts = decodeURIComponent($toCartForm.find(":input:not(:hidden)").serialize());
+
+        if(partial) {
+          opts = opts + "&partialPayment=1";
+        }
+
         var configurableProdStock = <?php echo $block->getStockForConfigurableProduct() ?>;
         console.log(JSON.stringify(configurableProdStock));
         var stockVals = "1,2,3";
@@ -86,19 +92,11 @@
         window.location = productUrl;
     }
   };
-
-  require(['jquery','mage/translate'],function($){
-        $(".fngrsharesdk-container").addClass("fngrsharesdk-productpage");
-        var msg = $.mage.__("Please fill in all of the required fields");
-
-        var $btnClicked = $("#payapi-button");
-          $btnClicked.click(function(evt){
-            evt.preventDefault();
-            _payapi.checkMandatory(location.href,false,msg);
-          });
-  });
   </script>
-<?php if ($block->getSecureFormData() && count($block->getSecureFormData()->products) > 1) {?>
+<?php 
+if ($block->getSecureFormData() && count($block->getSecureFormData()->products) > 1) {
+  $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getSecureFormData()->products[0]->priceInCentsIncVat, $block->getSecureFormData()->order->currency); ?>
+
 <meta name="io.payapi.webshop" content="<?php
 echo $block->escapeHtml($block->getInstantBuyBlock()->getPublicId()); ?>">
 <meta name="order.currency" content="<?php
@@ -109,6 +107,10 @@ echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsEx
 echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsIncVat); ?>">
 <meta name="order.tosUrl" content="<?php
 echo $block->escapeUrl($block->getSecureFormData()->order->tosUrl); ?>">
+<?php if($partialPay && $partialPay['code']==200 && $block->isPartialPaymentUrl()) { ?>
+  <meta name="order.preselectedPartialPayment" content="<?php
+echo $block->escapeUrl($partialPay['data']['paymentMethod']); ?>">
+<?php } ?>
 <meta name="product.id" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[0]->id); ?>">
 <meta name="product.quantity" content="<?php
@@ -145,7 +147,9 @@ echo $block->escapeUrl($block->getSecureFormData()->returnUrls->success); ?>">
 echo $block->escapeUrl($block->getSecureFormData()->returnUrls->cancel); ?>">
 <meta name="returnUrls.failed" content="<?php
 echo $block->escapeUrl($block->getSecureFormData()->returnUrls->failed); ?>">
-<?php }?>
+<?php } else {
+ $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getPriceInclTax()*100, $block->getCurrentCurrencyCode()); 
+}?>
 <meta name="product.extraData" content="<?php
 echo $block->escapeHtml($block->getExtraData()); ?>">
 <button id="payapi-button" class="action primary" style="margin-top:10px; font-size: 16px;
@@ -154,5 +158,42 @@ echo $block->escapeHtml($block->getExtraData()); ?>">
     padding: 10px 20px;">
   <span><?php echo $block->escapeHtml(__('Instant Buy')) ?></span>
 </button>
-<?php }?>
+<?php } 
+ 
+if($partialPay && $partialPay['code']==200){
+?>
+
+  <button id="payapi-partpay-button" class="action primary" style="margin-top:10px; font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 10px 20px;">
+  <span><?php echo $block->escapeHtml(str_replace("##",($partialPay['data']['pricePerMonthInCents']/100.0).' '.$block->getCurrentCurrencyCode(),__('Starting from ##/month'))) ?></span>
+</button>
+
+<?php } ?>
+<script type="text/javascript">
+  
+  
+     _payapi.partialPaymentEnabledForProduct = function _partialPayment(url){
+		  //Returns true if the product received as url has partial payment enabled
+		  return $("#payapi-partpay-button").length > 0;	
+	  }; 
+  require(['jquery','mage/translate'],function($){
+        $(".fngrsharesdk-container").addClass("fngrsharesdk-productpage");
+        var msg = $.mage.__("Please fill in all of the required fields");
+
+        var $btnClicked = $("#payapi-button");
+          $btnClicked.click(function(evt){
+            evt.preventDefault();
+            _payapi.checkMandatory(location.href,false,msg);
+          });
+          var $btnClickedPartial = $("#payapi-partpay-button");
+          $btnClickedPartial.click(function(evt){
+            evt.preventDefault();
+            _payapi.checkMandatory(location.href,false,msg,true); 
+          });
+  });
+</script>
+
+<?php } ?>
 </div>
