@@ -1,43 +1,72 @@
 
 <div>
-<?php if ($block->checkPayApiConfiguration() && $block->getIsInstantBuyEnabled()) {?>
-<script>
-require(['jquery'],function($){
+  <?php if ($block->checkPayApiConfiguration() && $block->getIsInstantBuyEnabled()) {?>
 
-    var $btnClicked = $("#payapi-instantbutton");
-    $btnClicked.click(function(evt){
-        evt.preventDefault();
-        var jsonData = {
-            "referenceQuoteId": window.checkoutConfig.quoteItemData[0].quote_id,
-            "ipaddress":"<?php echo $block->escapeHtml($block->getVisitorIp()); ?>"
-        };
-        $.ajax({
-            showLoader: true,
-            type: "POST",
-            url: "/payapipages/index/secureformgenerator",
-            data: jsonData,
-            success: function(object){
-              var form = document.createElement('form');
-              form.style.display = 'none';
-              form.setAttribute('method', 'POST');
-              form.setAttribute('action', object.url);
-              form.setAttribute('enctype', 'application/json');
-
-              var input = document.createElement('input');
-              input.name = 'data';
-              input.type = 'text';
-              input.setAttribute('value', object.data);
-
-              form.appendChild(input);
-              document.getElementsByTagName('body')[0].appendChild(form);
-              form.submit();
-            }
-        });
-    });
-});
-</script>
   <button id="payapi-instantbutton" class="action primary checkout" style="margin-right:10px">
     <span><?php echo $block->escapeHtml(__('Instant Buy')) ?></span>
-</button>
-<?php }?>
+  </button>
+  <button id="payapi-instantbutton-partial" class="action primary checkout" style="margin-top:20px">
+    <span id="payapi-instantbutton-partial-title"></span>
+  </button>
+
+  <script>
+    require(['jquery'],function($){
+
+      var $btnClicked = $("#payapi-instantbutton");
+      $btnClicked.click(function(evt){
+        cartSummaryPartiaPayment(evt);
+      });
+
+      function cartSummaryPartiaPayment(evt, partialPayment = false){
+        evt.preventDefault();
+        var jsonData = {
+          "referenceQuoteId": window.checkoutConfig.quoteItemData[0].quote_id,
+          "ipaddress":"<?php echo $block->escapeHtml($block->getVisitorIp()); ?>"
+        };
+        if(partialPayment){
+          jsonData['partialPayment'] = partialPayment;
+        }
+        
+        $.ajax({
+          showLoader: true,
+          type: "POST",
+          url: "/payapipages/index/secureformgenerator",
+          data: jsonData,
+          success: function(object){
+            var form = document.createElement('form');
+            form.style.display = 'none';
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', object.url);
+            form.setAttribute('enctype', 'application/json');
+
+            var input = document.createElement('input');
+            input.name = 'data';
+            input.type = 'text';
+            input.setAttribute('value', object.data);
+
+            form.appendChild(input);
+            document.getElementsByTagName('body')[0].appendChild(form);
+            form.submit();
+          }
+        });
+      }
+
+      var jsObjPpay = '<?php echo json_encode($block->getPartialPaymentForCart());?>';
+      var partialPaymentForCart = JSON.parse(jsObjPpay);   
+      if(partialPaymentForCart.code == 200){
+
+        var $btnClickedPartial = $("#payapi-instantbutton-partial");
+        $btnClickedPartial.click(function(evt){
+          cartSummaryPartiaPayment(evt,partialPaymentForCart.data.paymentMethod);
+        });
+        var partialBtnTitle = "<?php echo $block->escapeHtml(__('Starting from ##/month'));?>";
+        partialBtnTitle = partialBtnTitle.replace("##",(partialPaymentForCart.data.pricePerMonthInCents/100.0)+' '+partialPaymentForCart.data.currency);
+        $("#payapi-instantbutton-partial-title").text(partialBtnTitle);
+        console.log("PAYMENT METHOD" + partialPaymentForCart.data.paymentMethod);
+      } else {
+        $("#payapi-instantbutton-partial").remove();
+      }
+    });
+  </script>
+  <?php }?>
 </div>

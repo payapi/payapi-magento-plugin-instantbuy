@@ -271,6 +271,7 @@ class ProductDetail extends AbstractProduct
                     $stockItem->getMinSaleQty(),
                     $stockItem->getMaxSaleQty(),
                     $simple->getId(),
+                    $simple->getPriceInfo()->getPrice('final_price')->getAmount()->getValue()
                 ];
             }
         }

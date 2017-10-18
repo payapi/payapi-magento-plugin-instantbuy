@@ -1,11 +1,44 @@
 
 <div>
-<?php if ($block->checkPayApiConfiguration()){
-  if($block->getInstantBuyBlock()->getIsInstantBuyEnabled()) {
-    ?>
+<?php if ($block->checkPayApiConfiguration()) {
+    if ($block->getInstantBuyBlock()->getIsInstantBuyEnabled()) {
+        ?>
 
   <script>
 
+    function getDynamicOptionsVals(){
+      var $toCartForm = $("#product_addtocart_form");
+      var configurableProdStock = <?php echo $block->getStockForConfigurableProduct() ?>;
+        var stockVals = [0,0,0];
+        if ("order" in configurableProdStock) {
+
+          var attrsForm = $toCartForm.find(":input.super-attribute-select").serializeArray();
+          var auxAttrs = [];
+          attrsForm.forEach (function(item){
+            auxAttrs[item.name] = item.value;
+          });
+          attrsForm = $toCartForm.find(":input.swatch-input").serializeArray();
+          attrsForm.forEach (function(item){
+            auxAttrs[item.name] = item.value;
+          });
+          attrsForm = auxAttrs;
+          console.log(JSON.stringify(attrsForm));
+
+          var strStockVals = "";
+
+          configurableProdStock.order.forEach (function(optionId){
+            strStockVals = strStockVals + optionId+":"+ attrsForm["super_attribute["+ optionId +"]"] + "&";
+          });
+
+          stockVals = configurableProdStock.attrs[strStockVals];
+        }else{
+          stockVals = "<?php echo $block->getStockItem()->getQty() . ","
+        . $block->getStockItem()->getMinSaleQty() . ","
+        . $block->getStockItem()->getMaxSaleQty() . ",0," . $block->getPriceInclTax(); ?>".split(",").map(Number);
+
+      }
+      return stockVals;
+    }
   var _payapi = {
     checkMandatory: function _checkMandatory(url,silencePopup,msg, partial = false){
         var $toCartForm = $("#product_addtocart_form");
@@ -24,36 +57,8 @@
           opts = opts + "&partialPayment=1";
         }
 
-        var configurableProdStock = <?php echo $block->getStockForConfigurableProduct() ?>;
-        console.log(JSON.stringify(configurableProdStock));
-        var stockVals = "1,2,3";
-        if ("order" in configurableProdStock) {
-
-          var attrsForm = $toCartForm.find(":input.super-attribute-select").serializeArray();
-          var auxAttrs = [];
-          attrsForm.forEach (function(item){
-            auxAttrs[item.name] = item.value;
-          });
-          attrsForm = $toCartForm.find(":input.swatch-input").serializeArray();          
-          attrsForm.forEach (function(item){
-            auxAttrs[item.name] = item.value;
-          });          
-          attrsForm = auxAttrs;          
-          console.log(JSON.stringify(attrsForm));
-
-          var strStockVals = "";
-
-          configurableProdStock.order.forEach (function(optionId){
-            strStockVals = strStockVals + optionId+":"+ attrsForm["super_attribute["+ optionId +"]"] + "&";
-          });
-
-          stockVals = configurableProdStock.attrs[strStockVals];
-        }else{
-          stockVals = "<?php echo $block->getStockItem()->getQty() . ","
-    . $block->getStockItem()->getMinSaleQty() . ","
-    . $block->getStockItem()->getMaxSaleQty(); ?>".split(",").map(Number);
-
-      }
+        var stockVals = getDynamicOptionsVals();
+        console.log(stockVals);
 
           var curQty = $("#qty").attr("value");
           var $messages = $(".page-messages.messages");
@@ -84,18 +89,18 @@
           separator = "?";
         }
 
-        if (silencePopup){          
+        if (silencePopup){
           return url+separator+opts;
         }
-        var productUrl = "<?php echo ($block->getInstantBuyBlock()->getIsStaging())? 'https://staging-input.payapi.io/v1/webshop/':'https://input.payapi.io/v1/webshop/';?>";
-        productUrl = productUrl + encodeURIComponent(url+separator+opts);        
+        var productUrl = "<?php echo ($block->getInstantBuyBlock()->getIsStaging()) ? 'https://staging-input.payapi.io/v1/webshop/' : 'https://input.payapi.io/v1/webshop/'; ?>";
+        productUrl = productUrl + encodeURIComponent(url+separator+opts);
         window.location = productUrl;
     }
   };
   </script>
-<?php 
+<?php
 if ($block->getSecureFormData() && count($block->getSecureFormData()->products) > 1) {
-  $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getSecureFormData()->products[0]->priceInCentsIncVat, $block->getSecureFormData()->order->currency); ?>
+            $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getSecureFormData()->products[0]->priceInCentsIncVat * $block->getSecureFormData()->products[0]->quantity, $block->getSecureFormData()->order->currency);?>
 
 <meta name="io.payapi.webshop" content="<?php
 echo $block->escapeHtml($block->getInstantBuyBlock()->getPublicId()); ?>">
@@ -107,10 +112,10 @@ echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsEx
 echo $block->escapeHtml($block->getSecureFormData()->products[1]->priceInCentsIncVat); ?>">
 <meta name="order.tosUrl" content="<?php
 echo $block->escapeUrl($block->getSecureFormData()->order->tosUrl); ?>">
-<?php if($partialPay && $partialPay['code']==200 && $block->isPartialPaymentUrl()) { ?>
+<?php if ($partialPay && $partialPay['code'] == 200 && $block->isPartialPaymentUrl()) { ?>
   <meta name="order.preselectedPartialPayment" content="<?php
 echo $block->escapeUrl($partialPay['data']['paymentMethod']); ?>">
-<?php } ?>
+<?php }?>
 <meta name="product.id" content="<?php
 echo $block->escapeHtml($block->getSecureFormData()->products[0]->id); ?>">
 <meta name="product.quantity" content="<?php
@@ -148,8 +153,8 @@ echo $block->escapeUrl($block->getSecureFormData()->returnUrls->cancel); ?>">
 <meta name="returnUrls.failed" content="<?php
 echo $block->escapeUrl($block->getSecureFormData()->returnUrls->failed); ?>">
 <?php } else {
- $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getPriceInclTax()*100, $block->getCurrentCurrencyCode()); 
-}?>
+            $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getPriceInclTax() * 100, $block->getCurrentCurrencyCode());
+        }?>
 <meta name="product.extraData" content="<?php
 echo $block->escapeHtml($block->getExtraData()); ?>">
 <button id="payapi-button" class="action primary" style="margin-top:10px; font-size: 16px;
@@ -158,26 +163,25 @@ echo $block->escapeHtml($block->getExtraData()); ?>">
     padding: 10px 20px;">
   <span><?php echo $block->escapeHtml(__('Instant Buy')) ?></span>
 </button>
-<?php } 
- 
-if($partialPay && $partialPay['code']==200){
-?>
-
+<?php }?>
+<div id="partialpay-container">
+<?php
+if ($partialPay && $partialPay['code'] == 200) {
+        ?>
   <button id="payapi-partpay-button" class="action primary" style="margin-top:10px; font-size: 16px;
     text-transform: uppercase;
     font-weight: 500;
     padding: 10px 20px;">
-  <span><?php echo $block->escapeHtml(str_replace("##",($partialPay['data']['pricePerMonthInCents']/100.0).' '.$block->getCurrentCurrencyCode(),__('Starting from ##/month'))) ?></span>
+  <span><?php echo $block->escapeHtml(str_replace("##", ($partialPay['data']['pricePerMonthInCents'] / 100.0) . ' ' . $block->getCurrentCurrencyCode(), __('Starting from ##/month'))) ?></span>
 </button>
-
-<?php } ?>
+<?php }?>
+</div>
 <script type="text/javascript">
-  
-  
+
      _payapi.partialPaymentEnabledForProduct = function _partialPayment(url){
-		  //Returns true if the product received as url has partial payment enabled
-		  return $("#payapi-partpay-button").length > 0;	
-	  }; 
+      //Returns true if the product received as url has partial payment enabled
+      return $("#payapi-partpay-button").length > 0;
+    };
   require(['jquery','mage/translate'],function($){
         $(".fngrsharesdk-container").addClass("fngrsharesdk-productpage");
         var msg = $.mage.__("Please fill in all of the required fields");
@@ -190,10 +194,58 @@ if($partialPay && $partialPay['code']==200){
           var $btnClickedPartial = $("#payapi-partpay-button");
           $btnClickedPartial.click(function(evt){
             evt.preventDefault();
-            _payapi.checkMandatory(location.href,false,msg,true); 
+            _payapi.checkMandatory(location.href,false,msg,true);
           });
+
+          $("#product_addtocart_form").change(function(evt){
+            var $toCartForm = $("#product_addtocart_form");
+            var isValid = $toCartForm.validation('isValid');
+            if(isValid){
+              var optionData = getDynamicOptionsVals();
+              console.log(optionData);
+              if(optionData && optionData.length > 4) {
+                var curQty = $("#qty").attr("value");
+                console.log("Total: " + (optionData[4] * curQty));
+          var jsonData = {
+                   "total" : optionData[4]*100*curQty
+                    };
+          $.ajax({
+                      showLoader: true,
+                      type: "POST",
+                      url: "/payapipages/index/checkpartialpayments",
+                      data: jsonData,
+                      success: function(object){
+                        console.log(object);
+                        if(object.code == 200){
+                          if($("#payapi-partpay-button").length == 0){
+                            $("#partialpay-container").append(
+                              $(document.createElement('button'))
+                          .addClass('action primary').attr('id','payapi-partpay-button')
+                          .attr('style',"margin-top:10px; font-size: 16px; text-transform: uppercase; font-weight: 500;padding: 10px 20px;")
+                          .click(function(evt) {
+                            evt.preventDefault();
+                            _payapi.checkMandatory(location.href,false,msg,true);
+                          }).append($(document.createElement('span'))));
+
+                          }
+                          var strPartial = "<?php echo $block->escapeHtml(__('Starting from ##/month')); ?>";
+                          strPartial = strPartial.replace("##",(object.data.pricePerMonthInCents/100.0)+' '+object.data.currency);
+                          console.log(strPartial);
+                          $("#payapi-partpay-button span:first-child").text(strPartial);
+                        } else {
+                          $("#payapi-partpay-button").remove();
+                        }
+
+                      }
+                  });
+                }
+              }
+                });
+
+
   });
 </script>
 
-<?php } ?>
+<?php }?>
+
 </div>

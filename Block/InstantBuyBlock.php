@@ -7,10 +7,14 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Payapi\CheckoutPayment\Block\Adminhtml\PayapiPluginConfiguration $payapiConfig,        
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Checkout\Model\Cart $currentCart,
+        \Payapi\CheckoutPayment\Block\Adminhtml\PayapiPluginConfiguration $payapiConfig,
         array $data = []
     ) {
-        $this->payapiConfig = $payapiConfig;        
+        $this->payapiConfig = $payapiConfig;
+        $this->storeManager = $storeManager;
+        $this->currentCart  = $currentCart;
         parent::__construct($context, $data);
     }
 
@@ -29,7 +33,8 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
         return $this->payapiConfig->getApiKey();
     }
 
-    public function getIsInstantBuyEnabled(){
+    public function getIsInstantBuyEnabled()
+    {
         return $this->payapiConfig->getIsInstantBuyEnabled();
     }
 
@@ -43,11 +48,24 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
         return $this->payapiConfig->getVisitorIp($checkParams);
     }
 
-    public function getPhpSdk(){
+    public function getPhpSdk()
+    {
         return $this->payapiConfig->getPhpSdk();
     }
 
-    public function getPartner() {  
+    public function getPartner()
+    {
         return $this->payapiConfig->getPartner();
+    }
+
+    public function getCurrentCurrencyCode()
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
+    }
+
+    public function getPartialPaymentForCart()
+    {
+        $sdk = $this->payapiConfig->getPhpSdk();
+        return $sdk->partialPayment($this->currentCart->getQuote()->getGrandTotal() * 100, $this->getCurrentCurrencyCode());
     }
 }
