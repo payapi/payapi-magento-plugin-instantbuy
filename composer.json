@@ -2,11 +2,11 @@
   "name": "payapi/magento-plugin-instantbuy",
   "description": "Integrating the PayApi Instant Buy functionality for Magento 2",
   "type": "magento2-module",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": ["OSL-3.0"],
   "require": {
     "php": ">=5.5.0",
-    "payapi/magento-plugin-gateway": "~1.0"
+    "payapi/magento-plugin-gateway": "^1.1"
 
   },
   "authors": [
