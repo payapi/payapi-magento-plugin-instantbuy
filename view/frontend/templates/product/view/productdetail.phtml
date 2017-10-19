@@ -100,7 +100,7 @@
   </script>
 <?php
 if ($block->getSecureFormData() && count($block->getSecureFormData()->products) > 1) {
-            $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getSecureFormData()->products[0]->priceInCentsIncVat * $block->getSecureFormData()->products[0]->quantity, $block->getSecureFormData()->order->currency);?>
+            $partialPay = $block->getInstantBuyBlock()->getPhpSdk()->partialPayment($block->getSecureFormData()->products[0]->priceInCentsIncVat * $block->getSecureFormData()->products[0]->quantity, $block->getSecureFormData()->order->currency,$block->getConsumerIpFromUrl());?>
 
 <meta name="io.payapi.webshop" content="<?php
 echo $block->escapeHtml($block->getInstantBuyBlock()->getPublicId()); ?>">

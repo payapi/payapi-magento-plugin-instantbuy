@@ -315,4 +315,12 @@ class ProductDetail extends AbstractProduct
 
         return false;
     }
+
+    public function getConsumerIpFromUrl(){
+        $consumerIp = $this->getRequest()->getQueryValue('consumerIp');
+        if($consumerIp){
+            return $consumerIp;
+        }
+        return $this->instantBuyBlock->getVisitorIp();
+    }
 }
