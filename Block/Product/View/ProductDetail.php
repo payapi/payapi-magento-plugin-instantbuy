@@ -13,9 +13,7 @@ class ProductDetail extends AbstractProduct
         \Payapi\CheckoutPayment\Logger\Logger $logger,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Tax\Api\TaxCalculationInterface $taxCalculation,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
@@ -25,9 +23,8 @@ class ProductDetail extends AbstractProduct
         $this->secureformData      = false;
         $this->messageManager      = $messageManager;
         $this->stockItemRepository = $stockItemRepository;
-        $this->storeManager        = $storeManager;
+        $this->storeManager        = $context->getStoreManager();
         $this->taxCalculation      = $taxCalculation;
-        $this->scopeConfig         = $scopeConfig;
         $this->productRepository   = $productRepository;
         $this->logger              = $logger;
     }

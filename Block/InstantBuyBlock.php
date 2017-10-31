@@ -7,13 +7,12 @@ class InstantBuyBlock extends \Magento\Framework\View\Element\Template
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Cart $currentCart,
         \Payapi\CheckoutPayment\Block\Adminhtml\PayapiPluginConfiguration $payapiConfig,
         array $data = []
     ) {
         $this->payapiConfig = $payapiConfig;
-        $this->storeManager = $storeManager;
+        $this->storeManager = $context->getStoreManager();
         $this->currentCart  = $currentCart;
         parent::__construct($context, $data);
     }
