@@ -1,0 +1,11 @@
+{
+	"intro_again":"Hei, igjen! Øyeblikkelig deling og betalinger er aktivert! Hold inne for å aksessere.",
+	"intro_social": "Hei! Denne nettsiden har innebygde funksjoner for enkel og rask deling på sosiale medier. Bare hold inne på hvilken som helst lenke, bilde eller annet sideinnhold, og dra det på topp av sosiale medier-ikonet for å dele det med venner og kollegaer. Enkelt som det!",
+	"intro_full": "Hei! Denne nettsiden har innebygde funksjoner for enkel og rask deling på sosiale medier, samt øyeblikkelige betalinger. Hold inne på produktet for å dele det på hvilket som helst av dine sosiale medier eller kjøp det direkte ved å benytte den øyeblikkelige betalingsfunksjonen. Enkelt som det!",
+	"intro_step1": "Hold inne på hvilket som helst produkt",
+	"intro_step2": "Og slipp for å dele eller kjøpe", 
+	"instant_buy": "Umiddelbart kjøp", 
+	"add_to_cart": "Legg til i handlekurven",
+	"partial_payment" : "Delbetaling",
+	"maintenance" : "Service under vedlikehold, prøv igjen senere"
+}

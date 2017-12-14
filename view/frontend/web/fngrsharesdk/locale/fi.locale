@@ -1,7 +1,11 @@
 {
-	"intro_again":"Hei taas! Pikaostaminen ja sosiaalinen jakaminen on päällä. Paina pitkään tuotten tai sisällön päällä aloittaaksesi.",
-	"intro_social": "Hei! Tämä sivusto sisältää helpon ja nopean toiminnon sosiaaliseen jakamiseen. Paina pitkään minkä tahansa linkin, kuvan tai muun sivun sisällön päällä ja vedä se haluamasi sosiaalisen median kuvakkeen päälle jakaaksesi sen ystäväsi kanssa. Helppoa!",
-	"intro_full": "Hei! Tämä sivusto sisältää helpon ja nopean toiminnon sosiaaliseen jakamiseen tai tuotteen ostamiseen. Paina pitkään minkä tahansa kuvan, linkin tai muun sivun sisällön päällä ja vedä ja tiputa se haluamasi sosiaalisen median kuvakkeen päälle jakaaksesi sen ystäväsi kanssa varten tai ostoikonin päälle ostaaksesi tuotteen. Helppoa!",
-	"intro_step1": "Paina pitkään tuotteen päällä",
-	"intro_step2": "Ja tiputa jakaaksesi tai ostaaksesi", "instant_buy": "Osta heti", "add_to_cart": "Lisää ostoskoriin", "partial_payment": "Osittainen maksu"
+	"intro_again":"Hei taas! Välitön jako ja maksut ovat käytössä! Paina pitkään päästäksesi sisään.",
+	"intro_social": "Hei! Tällä verkkosivulla on sisäänrakennettu helppo ja nopea sosiaalinen jakotapa. Paina pitkään mitä tahansa linkkiä, kuvaa tai muuta sivun sisältöä ja jaa se ystäviesi kanssa vetämällä se sosiaalisen median kuvakkeen päälle. Helppoa!",
+	"intro_full": "Hei! Tällä verkkosivulla on sisäänrakennettu helppo ja nopea sosiaalinen jakotapa. Myös pikaostostoiminto on käytössä. Paina pitkään tuotetta, jonka haluat jakaa sosiaalisessa mediassa tai osta se käyttämällä pikaostostoimintoa. Helppoa!",
+	"intro_step1": "Paina pitkään mitä tahansa tuotetta",
+	"intro_step2": "Tipauta se ostaaksesi tai jakaaksesi", 
+	"instant_buy": "Pikaostos", 
+	"add_to_cart": "Lisää ostoskoriin",
+	"partial_payment" : "Osamaksu",
+	"maintenance" : "Huollamme palvelua, yritä myöhemmin uudelleen"
 }

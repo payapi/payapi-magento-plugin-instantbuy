@@ -1,7 +1,11 @@
 {
-	"intro_again":"¡Hola de nuevo! Compartir y comprar es fácil. Mantén pulsada la pantalla para empezar.",
-	"intro_social": "¡Hola! Este sitio permite compartir contenido fácilmente. Mantén pulsado cualquier producto, imagen u otro contenido de la página y suéltalo sobre el icono del medio social para compartirlo con tus amigos. ¡Facil!",
-	"intro_full": "¡Hola! Este sitio permite compartir contenido fácilmente y comprar en un instante. Mantén pulsado cualquier producto, imagen u otro contenido para compartirlo o compra cualquier producto usando la funcionalidad de pago rápido. ¡Fácil!",	
-	"intro_step1": "Mantén pulsado cualquier producto",
-	"intro_step2": "Arrástralo para compartir o comprar", "instant_buy": "Compra ahora", "add_to_cart": "Añadir al carrito", "partial_payment": "Pago a plazos"
+	"intro_again":"¡Hola de nuevo! Se ha habilitado la funcionalidad de compartir y pagar instantáneamente. Acceda con una pulsación prolongada.",
+	"intro_social": "¡Buenas! Desde este sitio se puede publicar a las redes sociales de forma fácil y rápida. Mantenga pulsado cualquier enlace, imagen u otro contenido y aparecerá la opción de compartir con sus amigos. Bastará con arrastrarlo al icono de la red social donde quiera publicarlo. ¡Facilísimo!",
+	"intro_full": "¡Buenas! Desde este sitio se puede publicar a las redes sociales de forma fácil y rápida, y también podrá hacer compras instantáneas. Mantenga pulsado cualquier producto para compartirlo en cuaqluier red social o comprarlo mediante la funcionalidad de pago instantáneo. ¡Facilísimo!",
+	"intro_step1": "Mantenga pulsado cualquier producto",
+	"intro_step2": "Arrástrelo para compartirlo o comprarlo", 
+	"instant_buy": "Compra instantánea", 
+	"add_to_cart": "Añadir al carrito",
+	"partial_payment" : "Pago a plazos",
+	"maintenance" : "Servicio en mantenimiento. Por favor, inténtelo más tarde"
 }

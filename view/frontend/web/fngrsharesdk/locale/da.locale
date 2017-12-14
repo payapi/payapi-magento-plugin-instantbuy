@@ -1,0 +1,11 @@
+{
+	"intro_again":"Hej igen! Den øjeblikkelige deling og betalinger er aktiveret! Tryk i nogle sekunder for at få adgang.",
+	"intro_social": "Hej!  Denne hjemmeside har indbygget en link for nem og hurtig social deling. Tryk i nogle sekunder på et link, et billede eller et andet sideindhold for at dele dette med dine venner og træk det oven på ikonet for sociale medier. Nemt!",
+	"intro_full": "Hej!  Denne hjemmeside har indbygget en nem og hurtig social deling link for øjeblikkelige køb. Tryk i nogle sekunder på produktet for at dele det på en hvilken som helst socialmediekanal eller købe den ved hjælp af øjeblikkelig betalings funktionalitet. Nemt!",
+	"intro_step1": "Tryk i nogle sekunder på et produkt",
+	"intro_step2": "Og slip for at dele eller købe", 
+	"instant_buy": "Øjeblikkeligt køb", 
+	"add_to_cart": "Tilføj til kurven",
+	"partial_payment" : "Delvis betaling",
+	"maintenance" : "Service under vedligeholdelse, prøv igen senere"
+}

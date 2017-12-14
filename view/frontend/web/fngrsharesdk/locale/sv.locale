@@ -1,0 +1,11 @@
+{
+	"intro_again":"Hej igen! Direktdelning och direktbetalning är aktiverade! Tryck och håll kvar för att använda.",
+	"intro_social": "Hej! Den här webbplatsen har inbyggda och aktiverade funktioner för enkel och snabb social delning. Du behöver bara trycka och hålla kvar på en länk, bild eller något annat sidinnehåll och sedan dra det till en ikon för ett socialt medium för att dela det med dina vänner. Lätt!",
+	"intro_full": "Hej! Den här webbplatsen har inbyggda och aktiverade funktioner för direktköp samt för enkel och snabb social delning. Tryck och håll kvar på produkten för att dela den på en social mediekanal eller köp den genom att använda direktköpsfunktionen. Lätt!",
+	"intro_step1": "Tryck och håll kvar på en produkt",
+	"intro_step2": "Och släpp för att dela eller köpa", 
+	"instant_buy": "Direktköp", 
+	"add_to_cart": "Lägg i varukorgen",
+	"partial_payment" : "Delbetalning",
+	"maintenance" : "Service under underhåll, försök igen senare"
+}

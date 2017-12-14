@@ -29,10 +29,9 @@
           configurableProdStock.order.forEach (function(optionId){
             strStockVals = strStockVals + optionId+":"+ attrsForm["super_attribute["+ optionId +"]"] + "&";
           });
-
           stockVals = configurableProdStock.attrs[strStockVals];
         }else{
-          stockVals = "<?php echo $block->getStockItem()->getQty() . ","
+          stockVals = "<?php echo max($block->getStockItem()->getQty(),1) . ","
         . $block->getStockItem()->getMinSaleQty() . ","
         . $block->getStockItem()->getMaxSaleQty() . ",0," . $block->getPriceInclTax(); ?>".split(",").map(Number);
 
@@ -45,6 +44,9 @@
         var isValid = $toCartForm.validation('isValid');
         if (!isValid){
             if (!silencePopup){
+              if(msg == ''){
+                msg = $.mage.__("Please select or fill in all of the required fields");
+              }
               alert(msg);
             }
           return '';
@@ -88,7 +90,6 @@
         if(url.indexOf("?") < 0){
           separator = "?";
         }
-
         if (silencePopup){
           return url+separator+opts;
         }
@@ -184,7 +185,7 @@ if ($partialPay && $partialPay['code'] == 200) {
     };
   require(['jquery','mage/translate'],function($){
         $(".fngrsharesdk-container").addClass("fngrsharesdk-productpage");
-        var msg = $.mage.__("Please fill in all of the required fields");
+        var msg = $.mage.__("Please select or fill in all of the required fields");
 
         var $btnClicked = $("#payapi-button");
           $btnClicked.click(function(evt){

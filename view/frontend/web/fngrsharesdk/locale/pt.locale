@@ -1,0 +1,11 @@
+{
+	"intro_again":"Olá novamente! A partilha e pagamentos instantâneos estão ativados! Pressione prolongadamente para aceder.",
+	"intro_social": "Olá! Este website possui a partilha social simples e rápida ativada. Só tem que pressionar demoradamente qualquer hiperligação, imagem ou outro conteúdo da página para o partilhar com os seus amigos e arrastar para cima dos ícones das redes sociais. Fácil!",
+	"intro_full": "Olá! Este website possui a partilha social simples e rápida, bem como compras instantâneas ativadas. Pressione demoradamente no produto para o partilhar em qualquer rede social ou compre-o, utilizando a funcionalidade de pagamento instantâneo. Fácil!",
+	"intro_step1": "Clique demoradamente em qualquer produto",
+	"intro_step2": "E solte para partilhar ou comprar", 
+	"instant_buy": "Compra instantânea", 
+	"add_to_cart": "Adicionar ao carrinho",
+	"partial_payment" : "Pagamento parcial",
+	"maintenance" : "Serviço durante a manutenção, tente novamente mais tarde"
+}

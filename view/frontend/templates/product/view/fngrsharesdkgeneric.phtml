@@ -76,7 +76,11 @@ require(['jquery'],function($){
         payapiActions.isStaging = false;
         <?php }?>
 
-        $("a.product-item-photo").addClass("fngrsharesdk-product");
+        $("a.product-item-photo").each(function(e){
+          if(!$(this).parent().hasClass("item")) {
+            $(this).addClass("fngrsharesdk-product");
+          }
+        });
 
         <?php if ($block->getIsInstantBuyEnabled()) {?>
 
@@ -227,34 +231,40 @@ require(['jquery'],function($){
   });
   }
 
-  window.setTimeout(function(){
-    $("#top-cart-btn-checkout").after(
-     "<button class='action primary checkout' style='margin:10px' id='payapi-mini-instantbuy'><span><?php
-     echo $block->escapeHtml(__('Instant Buy')) ?></span></button>");
-    var $btnClicked = $("#payapi-mini-instantbuy");
-    $btnClicked.click(function(evt){
-     clickMiniCartInstantBuy(evt);
-   });
 
-    var jsObjPpay = '<?php echo json_encode($block->getPartialPaymentForCart());?>';
-    var partialPaymentForCart = JSON.parse(jsObjPpay);   
-    if(partialPaymentForCart.code == 200){
-
-      var partialBtnTitle = "<?php echo $block->escapeHtml(__('Starting from ##/month'));?>";
-      partialBtnTitle = partialBtnTitle.replace("##",(partialPaymentForCart.data.pricePerMonthInCents/100.0)+' '+partialPaymentForCart.data.currency);
-
-      $("#top-cart-btn-checkout").after(
-       "<button class='action primary checkout' style='margin:10px' id='payapi-mini-partialpayment'><span>"+partialBtnTitle+"</span></button>");
-      $("#payapi-mini-partialpayment").click(function(evt){
-        console.log("PAyin parts: "+partialPaymentForCart.data.paymentMethod);
-        clickMiniCartInstantBuy(evt, partialPaymentForCart.data.paymentMethod);
-      });
-
-
-    } else {
+  $("a.showcart").click(function(e){    
+    if($("#payapi-mini-instantbuy").length == 0) {
+        $("#top-cart-btn-checkout").after(
+         "<button class='action primary checkout' style='margin-top:10px' id='payapi-mini-instantbuy'><span><?php
+         echo $block->escapeHtml(__('Instant Buy')) ?></span></button>");
+        var $btnClicked = $("#payapi-mini-instantbuy");
+        $btnClicked.click(function(evt){
+         clickMiniCartInstantBuy(evt);
+       });
+    }
+    if($("#payapi-mini-partialpayment").length > 0) {
       $("#payapi-mini-partialpayment").remove();
     }
-  },5000);
+    $.ajax({
+      showLoader: true,
+      type: "POST",
+      url: "/payapipages/index/checkpartialpayments",
+      data: {},
+      success: function(partialPaymentForCart){
+        if(partialPaymentForCart.code == 200){
+          var partialBtnTitle = "<?php echo $block->escapeHtml(__('Starting from ##/month'));?>";
+          partialBtnTitle = partialBtnTitle.replace("##",(partialPaymentForCart.data.pricePerMonthInCents/100.0)+' '+partialPaymentForCart.data.currency);
+
+          $("#top-cart-btn-checkout").after(
+           "<button class='action primary checkout' style='margin-top:10px' id='payapi-mini-partialpayment'><span>"+partialBtnTitle+"</span></button>");
+          $("#payapi-mini-partialpayment").click(function(evt){
+            console.log("PAyin parts: "+partialPaymentForCart.data.paymentMethod);
+            clickMiniCartInstantBuy(evt, partialPaymentForCart.data.paymentMethod);
+          });
+        }
+      }
+    });
+  });
 
   <?php }?>
 
